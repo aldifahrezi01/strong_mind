@@ -1,0 +1,61 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: github_events
+      POSTGRES_PASSWORD: github_events
+      POSTGRES_DB: github_events_development
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U github_events -d github_events_development"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    environment:
+      RAILS_ENV: development
+      DATABASE_HOST: db
+      DATABASE_USER: github_events
+      DATABASE_PASSWORD: github_events
+      LOG_LEVEL: info
+      INGEST_POLL_INTERVAL_SECONDS: "90"
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["bundle", "exec", "puma", "-C", "config/puma.rb"]
+
+  ingest:
+    build: .
+    environment:
+      RAILS_ENV: development
+      DATABASE_HOST: db
+      DATABASE_USER: github_events
+      DATABASE_PASSWORD: github_events
+      LOG_LEVEL: info
+      GITHUB_EVENTS_URL: https://api.github.com/events
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["bundle", "exec", "rake", "ingest:once"]
+
+  test:
+    build: .
+    environment:
+      RAILS_ENV: test
+      DATABASE_HOST: db
+      DATABASE_USER: github_events
+      DATABASE_PASSWORD: github_events
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["bundle", "exec", "rspec"]
+
+volumes:
+  postgres_data:

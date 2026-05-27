@@ -1,0 +1,20 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: <%= ENV.fetch("DATABASE_HOST", "db") %>
+  port: <%= ENV.fetch("DATABASE_PORT", "5432") %>
+  username: <%= ENV.fetch("DATABASE_USER", "github_events") %>
+  password: <%= ENV.fetch("DATABASE_PASSWORD", "github_events") %>
+
+development:
+  <<: *default
+  database: github_events_development
+
+test:
+  <<: *default
+  database: github_events_test
+
+production:
+  <<: *default
+  database: github_events_production

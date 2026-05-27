@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd /app
+
+echo "[entrypoint] Waiting for PostgreSQL..."
+until bundle exec rails runner "ActiveRecord::Base.connection.execute('SELECT 1')" >/dev/null 2>&1; do
+  sleep 2
+done
+
+echo "[entrypoint] Running database migrations..."
+bundle exec rails db:prepare
+
+if [[ "${1:-}" == "bundle" && "${2:-}" == "exec" && "${3:-}" == "rspec" ]]; then
+  echo "[entrypoint] Preparing test database..."
+  RAILS_ENV=test bundle exec rails db:prepare
+fi
+
+echo "[entrypoint] Executing: $*"
+exec "$@"

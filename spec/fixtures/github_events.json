@@ -1,0 +1,38 @@
+[
+  {
+    "id": "12345678901",
+    "type": "WatchEvent",
+    "actor": { "id": 1, "login": "watcher", "url": "https://api.github.com/users/watcher" },
+    "repo": { "id": 99, "name": "org/other", "url": "https://api.github.com/repos/org/other" },
+    "payload": {},
+    "public": true,
+    "created_at": "2024-05-21T12:00:00Z"
+  },
+  {
+    "id": "98765432109",
+    "type": "PushEvent",
+    "actor": {
+      "id": 583231,
+      "login": "TheOctocat",
+      "display_login": "TheOctocat",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/TheOctocat",
+      "avatar_url": "https://avatars.githubusercontent.com/u/583231?"
+    },
+    "repo": {
+      "id": 1296269,
+      "name": "octocat/Hello-World",
+      "url": "https://api.github.com/repos/octocat/Hello-World"
+    },
+    "payload": {
+      "push_id": 105249413,
+      "size": 1,
+      "distinct_size": 1,
+      "ref": "refs/heads/master",
+      "head": "b1e8c6fea7d304f4f7b8ba655d6a58ff8c90eb72",
+      "before": "0d1d07e32b040733ebdc8ab87819237ee2e21030"
+    },
+    "public": true,
+    "created_at": "2024-05-21T12:01:00Z"
+  }
+]

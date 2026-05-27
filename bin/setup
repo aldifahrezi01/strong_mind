@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+require "fileutils"
+
+APP_ROOT = File.expand_path("..", __dir__)
+
+def system!(*args)
+  system(*args, exception: true)
+end
+
+FileUtils.chdir APP_ROOT do
+  system! "bundle install"
+  system! "bundle exec rails db:prepare"
+  puts "\n== Done =="
+  puts "Start with: docker compose up --build"
+end
